@@ -45,14 +45,16 @@ public class BST<T extends Comparable<T>> extends AbstractTree<T> {
 		} else {
 			TreeNode<T> parent = null;
 			TreeNode<T> current = root;
-
+			int slides = 0;
 			while (current != null) {
 				if (t.compareTo(current.element) < 0) {
 					parent = current;
 					current = current.left;
+					slides++;
 				} else if (t.compareTo(current.element) > 0) {
 					parent = current;
 					current = current.right;
+					slides++;
 				} else
 					return false;
 
@@ -60,8 +62,10 @@ public class BST<T extends Comparable<T>> extends AbstractTree<T> {
 			// node is null so we insert here
 			if (t.compareTo(parent.element) < 0) {
 				parent.left = createNewNode(t);
+				parent.left.depth = slides;
 			} else {
 				parent.right = createNewNode(t);
+				parent.right.depth = slides;
 			}
 		}
 		size++;
@@ -70,7 +74,9 @@ public class BST<T extends Comparable<T>> extends AbstractTree<T> {
 	}
 
 	protected TreeNode<T> createNewNode(T t) {
-		return new TreeNode<>(t);
+		TreeNode<T> node = new TreeNode<>(t);
+		node.depth = 0;
+		return node;
 	}
 
 	@Override
@@ -113,6 +119,7 @@ public class BST<T extends Comparable<T>> extends AbstractTree<T> {
 	}
 
 	public static class TreeNode<T extends Comparable<T>> {
+		protected int depth;
 		protected T element;
 		protected TreeNode<T> left;
 		protected TreeNode<T> right;
